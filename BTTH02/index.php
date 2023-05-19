@@ -32,7 +32,7 @@
 
 <body>
     <div class="container">
-        <h1 class="text-center mb-4 text-info">HỆ THỐNG ĐIỂM DANH MÔN HỌC ONLINE</h1>
+        <h1 class="text-center mb-4 text-info">CÔNG NGHỆ WEB</h1>
 
 
         <div class="row justify-content-center mt-5">
