@@ -1,11 +1,3 @@
-<?php
-    // require_once('../model/student.php');
-    // $studentModel = new student();
-    // $student = $studentModel->getAll();
-    // echo "<pre>";
-    //     print_r($student);
-    // echo "</pre>";
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,7 +18,6 @@
                 <li class="nav-item">
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
-
             </ul>
 
             <ul class="navbar-nav ml-auto">
@@ -40,6 +31,7 @@
                         <i class="fas fa-expand-arrows-alt"></i>
                     </a>
                 </li>
+
             </ul>
         </nav>
 
@@ -104,6 +96,7 @@
                                 </li>
                             </ul>
                         </li>
+
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fa-solid fa-graduation-cap"></i>
@@ -164,7 +157,7 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>Khu vực điểm danh 62TH2.1</h1>
+                            <h1>Lịch Sử Điểm Danh</h1>
                         </div>
                     </div>
                 </div>
@@ -179,7 +172,6 @@
                                 <th>Mô tả</th>
                                 <th>Trạng thái</th>
                                 <th>Lý do</th>
-                                <th>Gửi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -190,16 +182,8 @@
                                     1PM - 1:05PM
                                 </td>
                                 <td>Buổi học bình thường</td>
-                                <td>
-                                    <select class="form-select">
-                                        <option>Đi học</option>
-                                        <option>Vắng</option>
-                                    </select>
-                                </td>
+                                <td>Đi học</td>
                                 <td>...</td>
-                                <td>
-                                    <button type="submit" class="btn btn-primary">Gửi</button>
-                                </td>
                             </tr>
                             <tr>
                                 <td>
@@ -208,16 +192,8 @@
                                     1PM - 1:05PM
                                 </td>
                                 <td>Buổi học bình thường</td>
-                                <td>
-                                    <select class="form-select">
-                                        <option>Đi học</option>
-                                        <option>Vắng</option>
-                                    </select>
-                                </td>
+                                <td>Đi học</td>
                                 <td>...</td>
-                                <td>
-                                    <button type="submit" class="btn btn-primary">Gửi</button>
-                                </td>
                             </tr>
                             <tr>
                                 <td>
@@ -226,18 +202,9 @@
                                     1PM - 1:05PM
                                 </td>
                                 <td>Buổi học bình thường</td>
-                                <td>
-                                    <select class="form-select">
-                                        <option>Đi học</option>
-                                        <option>Vắng</option>
-                                    </select>
-                                </td>
+                                <td>Đi học</td>
                                 <td>...</td>
-                                <td>
-                                    <button type="submit" class="btn btn-primary">Gửi</button>
-                                </td>
                             </tr>
-
                         </tbody>
                     </table>
                 </div>

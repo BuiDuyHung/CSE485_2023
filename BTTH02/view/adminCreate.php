@@ -7,7 +7,6 @@
     <title>Trang Giảng Viên</title>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <link rel="stylesheet" href="../public/template/admin/plugins/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../public/template/admin/dist/css/adminlte.min.css">
 </head>
@@ -24,6 +23,11 @@
 
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
+                    <a class="nav-link" href="../index.php" role="button">
+                        Log Out
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" data-widget="fullscreen" href="#" role="button">
                         <i class="fas fa-expand-arrows-alt"></i>
                     </a>
@@ -33,7 +37,7 @@
 
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <a href="" class="brand-link">
-                <img src="../public/template/admin/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+                <img src="../public/template/admin/dist/img/AdminLTELogo.png" alt="" class="brand-image img-circle elevation-3" style="opacity: .8">
                 <span class="brand-text font-weight-light">Giảng Viên</span>
             </a>
 
@@ -209,7 +213,6 @@
         <script src="../public/template/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="../public/template/admin/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
         <script src="../public/template/admin/dist/js/adminlte.min.js"></script>
-        <script src="../public/template/admin/dist/js/demo.js"></script>
 
 </body>
 
