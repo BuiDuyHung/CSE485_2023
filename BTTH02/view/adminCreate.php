@@ -189,12 +189,18 @@
                                         </div>
 
                                         <div class="mb-3 row">
-                                            <label for="time" class="col-sm-2 col-form-label">Giờ:</label>
+                                            <label for="time" class="col-sm-2 col-form-label">Giờ bắt đầu:</label>
                                             <div class="col-sm-10">
                                                 <input type="time" id="time" name="time" required>
                                             </div>
                                         </div>
 
+                                        <div class="mb-3 row">
+                                            <label for="time" class="col-sm-2 col-form-label">Giờ kết thúc:</label>
+                                            <div class="col-sm-10">
+                                                <input type="time" id="time" name="time" required>
+                                            </div>
+                                        </div>
 
                                     </div>
 
