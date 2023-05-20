@@ -9,7 +9,7 @@
     try{
         $conn = new PDO($dsn, $username, $password);
     }catch(PDOException $ex){
-        die("Chet");
+        die("Lỗi kết nối!");
     }
 
     function pdo(string $sql, array $arguments = null)
