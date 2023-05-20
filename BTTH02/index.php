@@ -1,16 +1,18 @@
 <?php
-    require_once('model/user.php');
+    session_start();
+    require('model/DB.php');
+    require('model/user.php');
     $userModel = new user();
-    $user = $userModel->getAll();
-    $username = '';
-    $password = '';
+    $users = $userModel->getAll();
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
         $username = $_POST['username'];
         $password = $_POST['password'];
-        foreach($user as $user){
+        foreach($users as $user){
             if($user['email'] == $username and $user['password'] == $password){
-                if($user['id_level'] == '1')
+                if($user['id_level'] == '1'){
+                    $_SESSION['isLoginAdmin'] = $user['id'];
                     header("Location:view/admin.php");
+                }
                 else
                     header("Location:view/clients.php");
                 break;

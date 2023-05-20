@@ -1,10 +1,11 @@
 <?php
-    include('../model/DB.php');
-    class student{
-        public function __construct(){}
+    class student extends DB{
+        public function __construct(){parent::__construct();}
+
         public function getAll(){
-            $sql = "select * from students";
-            $stmt = pdo($sql);
+            $sql = "select id, fullName from students";
+            $stmt = parent::pdo($sql);
             return $stmt->fetchAll();
         }
+
     }

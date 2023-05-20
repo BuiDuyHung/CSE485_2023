@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: May 19, 2023 at 12:02 PM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Máy chủ: 127.0.0.1
+-- Thời gian đã tạo: Th5 20, 2023 lúc 08:45 PM
+-- Phiên bản máy phục vụ: 10.4.28-MariaDB
+-- Phiên bản PHP: 8.0.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,81 +18,111 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `db_attendance`
+-- Cơ sở dữ liệu: `ql_diemdanh`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `attendance`
+-- Cấu trúc bảng cho bảng `attendance`
 --
 
 CREATE TABLE `attendance` (
   `ID` int(11) NOT NULL,
   `days` date DEFAULT NULL,
-  `status` varchar(50) DEFAULT NULL,
-  `id_GV` int(11) DEFAULT NULL,
+  `lecturer_id` int(11) DEFAULT NULL,
   `id_courseClass` int(11) DEFAULT NULL,
-  `id_SV` int(11) DEFAULT NULL
+  `time_begin` time NOT NULL,
+  `time_end` time NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `attendance`
+-- Đang đổ dữ liệu cho bảng `attendance`
 --
 
-INSERT INTO `attendance` (`ID`, `days`, `status`, `id_GV`, `id_courseClass`, `id_SV`) VALUES
-(1, '2023-05-19', 'Đi học', 1, 1, 1),
-(2, '2023-05-19', 'Đi học', 1, 1, 2),
-(3, '2023-05-19', 'Vắng', 1, 1, 3);
+INSERT INTO `attendance` (`ID`, `days`, `lecturer_id`, `id_courseClass`, `time_begin`, `time_end`) VALUES
+(1, '2023-05-20', 1, 1, '13:00:00', '13:05:00'),
+(2, '2023-05-20', 1, 1, '23:07:00', '23:30:00'),
+(12, '2023-05-21', 1, 1, '01:43:00', '01:43:00');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `class`
+-- Cấu trúc bảng cho bảng `attendancerecords`
 --
 
-CREATE TABLE `class` (
-  `id_SV` int(11) DEFAULT NULL,
-  `id_courseClass` int(11) DEFAULT NULL
+CREATE TABLE `attendancerecords` (
+  `id` int(11) NOT NULL,
+  `attendance_id` int(11) NOT NULL,
+  `student_id` int(11) NOT NULL,
+  `status` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `class`
+-- Đang đổ dữ liệu cho bảng `attendancerecords`
 --
 
-INSERT INTO `class` (`id_SV`, `id_courseClass`) VALUES
-(1, 1),
-(2, 1),
-(3, 1),
-(4, 1),
-(5, 1);
+INSERT INTO `attendancerecords` (`id`, `attendance_id`, `student_id`, `status`) VALUES
+(1, 1, 1, 1),
+(2, 1, 2, 1),
+(3, 1, 3, 1),
+(4, 1, 4, 1),
+(5, 1, 5, 1),
+(7, 12, 1, NULL),
+(8, 12, 2, NULL),
+(9, 12, 3, NULL),
+(10, 12, 4, NULL),
+(11, 12, 5, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `courseclass`
+-- Cấu trúc bảng cho bảng `classdetail`
+--
+
+CREATE TABLE `classdetail` (
+  `id` int(11) NOT NULL,
+  `class_id` int(11) NOT NULL,
+  `student_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `classdetail`
+--
+
+INSERT INTO `classdetail` (`id`, `class_id`, `student_id`) VALUES
+(1, 1, 1),
+(4, 1, 2),
+(5, 1, 3),
+(6, 1, 4),
+(7, 1, 5);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `courseclass`
 --
 
 CREATE TABLE `courseclass` (
   `ID` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `timeStart` date DEFAULT NULL,
-  `timefinish` date DEFAULT NULL,
-  `id_GV` int(11) DEFAULT NULL,
+  `time_begin` date DEFAULT NULL,
+  `time_end` date DEFAULT NULL,
+  `lecturer_id` int(11) DEFAULT NULL,
   `id_course` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `courseclass`
+-- Đang đổ dữ liệu cho bảng `courseclass`
 --
 
-INSERT INTO `courseclass` (`ID`, `name`, `timeStart`, `timefinish`, `id_GV`, `id_course`) VALUES
-(1, 'Công nghệ Web-2-22', '2023-04-17', '2023-06-18', 1, 1);
+INSERT INTO `courseclass` (`ID`, `name`, `time_begin`, `time_end`, `lecturer_id`, `id_course`) VALUES
+(1, 'Công nghệ Web-2-22(62TH2)', '2023-04-17', '2023-06-18', 1, 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `courses`
+-- Cấu trúc bảng cho bảng `courses`
 --
 
 CREATE TABLE `courses` (
@@ -103,7 +133,7 @@ CREATE TABLE `courses` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `courses`
+-- Đang đổ dữ liệu cho bảng `courses`
 --
 
 INSERT INTO `courses` (`ID`, `courseID`, `title`, `content`) VALUES
@@ -114,7 +144,7 @@ INSERT INTO `courses` (`ID`, `courseID`, `title`, `content`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `lecturers`
+-- Cấu trúc bảng cho bảng `lecturers`
 --
 
 CREATE TABLE `lecturers` (
@@ -127,7 +157,7 @@ CREATE TABLE `lecturers` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `lecturers`
+-- Đang đổ dữ liệu cho bảng `lecturers`
 --
 
 INSERT INTO `lecturers` (`ID`, `fullName`, `email`, `phoneNumber`, `address`, `level`) VALUES
@@ -140,7 +170,7 @@ INSERT INTO `lecturers` (`ID`, `fullName`, `email`, `phoneNumber`, `address`, `l
 -- --------------------------------------------------------
 
 --
--- Table structure for table `level`
+-- Cấu trúc bảng cho bảng `level`
 --
 
 CREATE TABLE `level` (
@@ -151,7 +181,7 @@ CREATE TABLE `level` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `level`
+-- Đang đổ dữ liệu cho bảng `level`
 --
 
 INSERT INTO `level` (`ID`, `name`, `create_at`, `update_at`) VALUES
@@ -161,7 +191,7 @@ INSERT INTO `level` (`ID`, `name`, `create_at`, `update_at`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `register`
+-- Cấu trúc bảng cho bảng `register`
 --
 
 CREATE TABLE `register` (
@@ -169,15 +199,15 @@ CREATE TABLE `register` (
   `semester` varchar(50) NOT NULL,
   `stage` varchar(50) NOT NULL,
   `schoolYear` varchar(50) DEFAULT NULL,
-  `id_SV` int(11) DEFAULT NULL,
-  `id_course` int(11) DEFAULT NULL
+  `student_id` int(11) DEFAULT NULL,
+  `course_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `register`
+-- Đang đổ dữ liệu cho bảng `register`
 --
 
-INSERT INTO `register` (`ID`, `semester`, `stage`, `schoolYear`, `id_SV`, `id_course`) VALUES
+INSERT INTO `register` (`ID`, `semester`, `stage`, `schoolYear`, `student_id`, `course_id`) VALUES
 (1, 'Học kỳ II', 'Giai đoạn 2', '2022-2023', 1, 1),
 (2, 'Học kỳ II', 'Giai đoạn 2', '2022-2023', 2, 1),
 (3, 'Học kỳ II', 'Giai đoạn 2', '2022-2023', 3, 1),
@@ -187,7 +217,7 @@ INSERT INTO `register` (`ID`, `semester`, `stage`, `schoolYear`, `id_SV`, `id_co
 -- --------------------------------------------------------
 
 --
--- Table structure for table `students`
+-- Cấu trúc bảng cho bảng `students`
 --
 
 CREATE TABLE `students` (
@@ -201,7 +231,7 @@ CREATE TABLE `students` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `students`
+-- Đang đổ dữ liệu cho bảng `students`
 --
 
 INSERT INTO `students` (`ID`, `fullName`, `gender`, `birthday`, `email`, `phoneNumber`, `address`) VALUES
@@ -214,7 +244,7 @@ INSERT INTO `students` (`ID`, `fullName`, `gender`, `birthday`, `email`, `phoneN
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Cấu trúc bảng cho bảng `users`
 --
 
 CREATE TABLE `users` (
@@ -230,7 +260,7 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `users`
+-- Đang đổ dữ liệu cho bảng `users`
 --
 
 INSERT INTO `users` (`ID`, `name`, `email`, `password`, `phone`, `address`, `create_at`, `update_at`, `id_level`) VALUES
@@ -238,159 +268,185 @@ INSERT INTO `users` (`ID`, `name`, `email`, `password`, `phone`, `address`, `cre
 (2, 'quanlv', 'quanlv@gmail.com', '123456', '0985562258', 'Hà Nội', '2023-05-19', '2023-05-19', 2);
 
 --
--- Indexes for dumped tables
+-- Chỉ mục cho các bảng đã đổ
 --
 
 --
--- Indexes for table `attendance`
+-- Chỉ mục cho bảng `attendance`
 --
 ALTER TABLE `attendance`
   ADD PRIMARY KEY (`ID`),
-  ADD KEY `id_GV` (`id_GV`),
-  ADD KEY `id_courseClass` (`id_courseClass`),
-  ADD KEY `id_SV` (`id_SV`);
-
---
--- Indexes for table `class`
---
-ALTER TABLE `class`
-  ADD KEY `id_SV` (`id_SV`),
+  ADD KEY `id_GV` (`lecturer_id`),
   ADD KEY `id_courseClass` (`id_courseClass`);
 
 --
--- Indexes for table `courseclass`
+-- Chỉ mục cho bảng `attendancerecords`
+--
+ALTER TABLE `attendancerecords`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `attendance_id` (`attendance_id`),
+  ADD KEY `student_id` (`student_id`);
+
+--
+-- Chỉ mục cho bảng `classdetail`
+--
+ALTER TABLE `classdetail`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `class_id` (`class_id`),
+  ADD KEY `student_id` (`student_id`);
+
+--
+-- Chỉ mục cho bảng `courseclass`
 --
 ALTER TABLE `courseclass`
   ADD PRIMARY KEY (`ID`),
-  ADD KEY `id_GV` (`id_GV`),
+  ADD KEY `id_GV` (`lecturer_id`),
   ADD KEY `id_course` (`id_course`);
 
 --
--- Indexes for table `courses`
+-- Chỉ mục cho bảng `courses`
 --
 ALTER TABLE `courses`
   ADD PRIMARY KEY (`ID`);
 
 --
--- Indexes for table `lecturers`
+-- Chỉ mục cho bảng `lecturers`
 --
 ALTER TABLE `lecturers`
   ADD PRIMARY KEY (`ID`);
 
 --
--- Indexes for table `level`
+-- Chỉ mục cho bảng `level`
 --
 ALTER TABLE `level`
   ADD PRIMARY KEY (`ID`);
 
 --
--- Indexes for table `register`
+-- Chỉ mục cho bảng `register`
 --
 ALTER TABLE `register`
   ADD PRIMARY KEY (`ID`),
-  ADD KEY `id_SV` (`id_SV`),
-  ADD KEY `id_course` (`id_course`);
+  ADD KEY `id_SV` (`student_id`),
+  ADD KEY `id_course` (`course_id`);
 
 --
--- Indexes for table `students`
+-- Chỉ mục cho bảng `students`
 --
 ALTER TABLE `students`
   ADD PRIMARY KEY (`ID`);
 
 --
--- Indexes for table `users`
+-- Chỉ mục cho bảng `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`ID`),
   ADD KEY `id_level` (`id_level`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT cho các bảng đã đổ
 --
 
 --
--- AUTO_INCREMENT for table `attendance`
+-- AUTO_INCREMENT cho bảng `attendance`
 --
 ALTER TABLE `attendance`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
--- AUTO_INCREMENT for table `courseclass`
+-- AUTO_INCREMENT cho bảng `attendancerecords`
+--
+ALTER TABLE `attendancerecords`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT cho bảng `classdetail`
+--
+ALTER TABLE `classdetail`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT cho bảng `courseclass`
 --
 ALTER TABLE `courseclass`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `courses`
+-- AUTO_INCREMENT cho bảng `courses`
 --
 ALTER TABLE `courses`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `lecturers`
+-- AUTO_INCREMENT cho bảng `lecturers`
 --
 ALTER TABLE `lecturers`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT for table `level`
+-- AUTO_INCREMENT cho bảng `level`
 --
 ALTER TABLE `level`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `register`
+-- AUTO_INCREMENT cho bảng `register`
 --
 ALTER TABLE `register`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT for table `students`
+-- AUTO_INCREMENT cho bảng `students`
 --
 ALTER TABLE `students`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT for table `users`
+-- AUTO_INCREMENT cho bảng `users`
 --
 ALTER TABLE `users`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- Constraints for dumped tables
+-- Các ràng buộc cho các bảng đã đổ
 --
 
 --
--- Constraints for table `attendance`
+-- Các ràng buộc cho bảng `attendance`
 --
 ALTER TABLE `attendance`
-  ADD CONSTRAINT `attendance_ibfk_1` FOREIGN KEY (`id_GV`) REFERENCES `lecturers` (`ID`),
-  ADD CONSTRAINT `attendance_ibfk_2` FOREIGN KEY (`id_courseClass`) REFERENCES `courseclass` (`ID`),
-  ADD CONSTRAINT `attendance_ibfk_3` FOREIGN KEY (`id_SV`) REFERENCES `students` (`ID`);
+  ADD CONSTRAINT `attendance_ibfk_1` FOREIGN KEY (`lecturer_id`) REFERENCES `lecturers` (`ID`),
+  ADD CONSTRAINT `attendance_ibfk_2` FOREIGN KEY (`id_courseClass`) REFERENCES `courseclass` (`ID`);
 
 --
--- Constraints for table `class`
+-- Các ràng buộc cho bảng `attendancerecords`
 --
-ALTER TABLE `class`
-  ADD CONSTRAINT `class_ibfk_1` FOREIGN KEY (`id_SV`) REFERENCES `students` (`ID`),
-  ADD CONSTRAINT `class_ibfk_2` FOREIGN KEY (`id_courseClass`) REFERENCES `courseclass` (`ID`);
+ALTER TABLE `attendancerecords`
+  ADD CONSTRAINT `attendancerecords_ibfk_1` FOREIGN KEY (`attendance_id`) REFERENCES `attendance` (`ID`),
+  ADD CONSTRAINT `attendancerecords_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `students` (`ID`);
 
 --
--- Constraints for table `courseclass`
+-- Các ràng buộc cho bảng `classdetail`
+--
+ALTER TABLE `classdetail`
+  ADD CONSTRAINT `classdetail_ibfk_1` FOREIGN KEY (`class_id`) REFERENCES `courseclass` (`ID`),
+  ADD CONSTRAINT `classdetail_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `students` (`ID`);
+
+--
+-- Các ràng buộc cho bảng `courseclass`
 --
 ALTER TABLE `courseclass`
-  ADD CONSTRAINT `courseclass_ibfk_1` FOREIGN KEY (`id_GV`) REFERENCES `lecturers` (`ID`),
+  ADD CONSTRAINT `courseclass_ibfk_1` FOREIGN KEY (`lecturer_id`) REFERENCES `lecturers` (`ID`),
   ADD CONSTRAINT `courseclass_ibfk_2` FOREIGN KEY (`id_course`) REFERENCES `courses` (`ID`);
 
 --
--- Constraints for table `register`
+-- Các ràng buộc cho bảng `register`
 --
 ALTER TABLE `register`
-  ADD CONSTRAINT `register_ibfk_1` FOREIGN KEY (`id_SV`) REFERENCES `students` (`ID`),
-  ADD CONSTRAINT `register_ibfk_2` FOREIGN KEY (`id_course`) REFERENCES `courses` (`ID`);
+  ADD CONSTRAINT `register_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`ID`),
+  ADD CONSTRAINT `register_ibfk_2` FOREIGN KEY (`course_id`) REFERENCES `courses` (`ID`);
 
 --
--- Constraints for table `users`
+-- Các ràng buộc cho bảng `users`
 --
 ALTER TABLE `users`
   ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`id_level`) REFERENCES `level` (`ID`);
