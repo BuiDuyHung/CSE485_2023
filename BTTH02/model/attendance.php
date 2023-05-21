@@ -2,9 +2,9 @@
     class attendance extends DB{
         public function __construct(){parent::__construct();}
 
-        public function getAll(){
-            $sql = "select * from attendance";
-            $stmt = parent::pdo($sql);
+        public function getAttandanceByIdCourseClass($idCourseClass){
+            $sql = "select id, days, time_begin from attendance where id_courseClass = :id";
+            $stmt = parent::pdo($sql,[':id'=>$idCourseClass]);
             return $stmt->fetchAll();
         }
 

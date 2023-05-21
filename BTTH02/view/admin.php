@@ -3,6 +3,31 @@
     if(!isset($_SESSION['isLoginAdmin'])){
         header("Location: ../index.php");
     }
+    include('../model/DB.php');
+    include('../model/courseclass.php');
+    include('../model/attendance.php');
+    include('../model/student.php');
+    $attendanceModel = new attendance();
+    $courseClassModel = new courseclass();
+    $studentModel = new student();
+    $classes = $courseClassModel->getAll();
+    $course_id = '';
+    $att_id = '';
+    $date = '';
+    $time = '';
+    $students = array();
+    $attendances = array();
+    if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        $course_id = $_POST['course'];
+        $attendances = $attendanceModel->getAttandanceByIdCourseClass($course_id);
+    }
+    if(isset($_GET['att'])){
+        $att_id = $_GET['att'];
+        $course_id = $_GET['course'];
+        $date = $_GET['day'];
+        $time = $_GET['time'];
+        $students = $studentModel->getStudentByAttendanceId($att_id);
+    }
 ?>
 <?php include('../include/adminsite.php'); ?>
         <div class="content-wrapper">
@@ -26,9 +51,9 @@
                                     <h3 class="card-title">Thông tin</h3>
                                 </div>
 
-                                <form action="/some-url.php" method="post">
+                                <form method="post">
                                     <div class="card-body">
-                                        <div class="mb-3 row">
+                                        <!-- <div class="mb-3 row">
                                             <label for="year" class="col-sm-2 col-form-label">Năm học:</label>
                                             <div class="col-sm-10">
                                                 <select id="year" name="year" class="form-select">
@@ -49,9 +74,9 @@
                                                     <option value="Học kỳ 2">Học kỳ 2</option>
                                                 </select>
                                             </div>
-                                        </div>
+                                        </div> -->
 
-                                        <div class="mb-3 row">
+                                        <!-- <div class="mb-3 row">
                                             <label for="stage" class="col-sm-2 col-form-label">Giai đoạn:</label>
                                             <div class="col-sm-10">
                                                 <select id="stage" name="stage" class="form-select">
@@ -60,24 +85,43 @@
                                                     <option value="Giai đoạn 2">Giai đoạn 2</option>
                                                 </select>
                                             </div>
-                                        </div>
+                                        </div> -->
 
                                         <div class="mb-3 row">
                                             <label for="course" class="col-sm-2 col-form-label">Lớp học phần:</label>
                                             <div class="col-sm-10">
-                                                <select id="course" name="course" class="form-select">
-                                                    <option selected>Chọn lớp học phần</option>
-                                                    <option value="ABC101">Công nghệ Web-2-22</option>
+                                                <select id="course" name="course" class="form-select" required>
+                                                    <option value="" disabled selected>Chọn lớp học phần</option>
+                                                        <?php foreach($classes as $class){ ?>
+                                                            <option value="<?= $class['id']?>" <?=(($class['id'] == $course_id)? 'selected':'') ?> ><?= $class['name']?></option>
+                                                        <?php } ?>
                                                 </select>
+                                            </div>
+                                            <div class="col-sm-10">
+                                                <h2><?=(($course_id)?'Danh sách các phiên điểm danh đã tạo':'Chọn lớp học phần để xem các phiên điểm danh')?></h2>
+                                                <table class="table table-bordered table-striped">
+                                                    <tbody>
+                                                        <?php foreach($attendances as $attendance) {?>
+                                                            <tr>
+                                                                <td style="width: 80%"><?= "Ngày tạo: {$attendance['days']} -- Giờ bắt đầu: {$attendance['time_begin']}"?></td>
+                                                                <td style="width: 20%">
+                                                                    <a href="./admin.php?att=<?= $attendance['id']?>&course=<?= $course_id?>&day=<?=$attendance['days']?>&time=<?=$attendance['time_begin']?>" class="btn btn-primary">
+                                                                        Theo dõi
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                        <?php } ?>
+                                                    </tbody>
+                                                </table>
                                             </div>
                                         </div>
 
-                                        <div class="mb-3 row">
+                                        <!-- <div class="mb-3 row">
                                             <label for="date" class="col-sm-2 col-form-label">Ngày:</label>
                                             <div class="col-sm-10">
                                                 <input type="date" name="date" class="" id="date">
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
 
                                     <div class="card-footer">
@@ -91,42 +135,28 @@
             </section>
 
 
-            <h1 class="text-center mt-4 mb-5">Bảng Thông Tin</h1>
+            <h2 class="text-center mt-4 mb-5">Bảng theo dõi điểm danh <?= (($att_id)?"ngày: $date giờ tạo: $time":'')?></h2>
 
             <div class="row">
                 <div class="col-md-10 mx-auto">
                     <table class="table table-bordered table-striped">
                         <thead class="table-dark">
                             <tr>
-                                <th>ID</th>
-                                <th>Lớp</th>
-                                <th>Sĩ số</th>
-                                <th>Nghỉ học</th>
-                                <th>Đi học</th>
+                                <th style="width: 10%">STT</th>
+                                <th style="width: 30%">Tên</th>
+                                <th style="width: 30%">Email</th>
+                                <th style="width: 20%">Trạng thái</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>TH1</td>
-                                <td>63</td>
-                                <td>3</td>
-                                <td>60</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>TH2</td>
-                                <td>63</td>
-                                <td>0</td>
-                                <td>63</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>TH3</td>
-                                <td>63</td>
-                                <td>2</td>
-                                <td>61</td>
-                            </tr>
+                            <?php for($i = 0;$i<count($students);$i++){?>
+                                <tr>
+                                    <td><?= $i+1?></td>
+                                    <td><?= $students[$i]['fullName']?></td>
+                                    <td><?= $students[$i]['email']?></td>
+                                    <td><?= (($students[$i]['status'])?'Có mặt':'Vắng')?></td>
+                                </tr>
+                            <?php }?>
                         </tbody>
                     </table>
                 </div>
