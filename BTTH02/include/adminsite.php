@@ -9,6 +9,16 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../public/template/admin/dist/css/adminlte.min.css">
+    <style>
+        .fade-in-out {
+            opacity: 1;
+        }
+        .fade-in-out.show {
+            opacity: 0;
+            transition: opacity 0.5s;
+            transition-delay: 1s;
+        }
+    </style>
 </head>
 
 <body class="hold-transition sidebar-mini">

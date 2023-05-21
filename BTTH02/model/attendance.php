@@ -39,19 +39,19 @@
                 $stmt->bindValue(':sts','Chưa điểm danh');
                 $stmt->execute();
             }
-            if($stmt->rowCount() > 0){
-                header("location:./adminCreate.php?msg=sss");
-            }else{
-                header("location:./adminCreate.php?msg=err");
-            }
+            if($stmt->rowCount() > 0)
+                return $stmt->rowCount();
+            else    
+                return 0;
         }
 
         public function updateStatus($attID, $stuID, $status){
             $currentDate = Date("Y-m-d");
             $currentTime = Date("H:i");
             $attendance = $this->getAttendanceById($attID);
+            $time = date('H:i', strtotime($attendance['time_end'].' +1 minute'));
             $sql = "update attendancerecords set status = :sts where attendance_id = :att_id and student_id = :stu_id";
-            if($attendance['days'] >= $currentDate and $attendance['time_end'] >= $currentTime){
+            if($attendance['days'] >= $currentDate and $time >= $currentTime){
                 $stmt = parent::pdo($sql,[':sts'=> $status, ':att_id'=>$attID, ':stu_id'=> $stuID]);
                 return $stmt->rowCount();
             }

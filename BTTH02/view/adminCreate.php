@@ -6,21 +6,24 @@
     include('../model/DB.php');
     include('../model/courseclass.php');
     include('../model/attendance.php');
+    include('../model/student.php');
     include('../model/lecturer.php');
     $attendanceModel = new attendance();
     $courseClassModel = new courseclass();
     $lecturerModel = new lecturer();
+    $studentModel = new student();
     $lecturer = $lecturerModel->getLecturerByUserId($_SESSION['isLoginAdmin']);
     $lecturerId = $lecturer['id'];
     $classes = $courseClassModel->getClassByLecturerId($lecturerId);
+    $isSuccess = '';
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
         $courseId = $_POST['course'];
-        $students = $courseClassModel->getStudentInClass($courseId);
+        $students = $studentModel->getStudentByClassId($courseId);
         $date = $_POST['date'];
         $timeStart = $_POST['timeStart'];
         $timeEnd = $_POST['timeEnd'];
         $attendanceModel->insertAttendance($lecturerId,$date,$courseId,$timeStart,$timeEnd);
-        $attendanceModel->insertAttendanceRecord($students);
+        $isSuccess = $attendanceModel->insertAttendanceRecord($students);
     }
     include('../include/adminsite.php'); 
 ?>
@@ -133,6 +136,17 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <?php if($isSuccess) {?>
+                            <div class="alert alert-success col-5 offset-1 fade-in-out" role="alert">
+                                Thêm phiên điểm danh mới thành công
+                            </div>
+                        <?php }else if($isSuccess == 0) {?>
+                            <div class="row alert alert-danger col-5 offset-1 fade-in-out" role="alert">
+                                Có lỗi xảy ra trong quá trình thực hiện!
+                            </div>
+                        <?php } else echo ''?>
+                    </div>
                 </div>
             </section>
         </div>
@@ -141,7 +155,12 @@
         <script src="../public/template/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="../public/template/admin/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
         <script src="../public/template/admin/dist/js/adminlte.min.js"></script>
-
+        <script>
+            setTimeout(function() {
+                var element = document.querySelector(".fade-in-out");
+                element.classList.add("show");
+            }, 200);
+        </script>
 </body>
 
 </html>

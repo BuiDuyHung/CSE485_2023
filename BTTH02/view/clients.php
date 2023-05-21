@@ -56,13 +56,14 @@
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <button type="submit" class="btn btn-primary">Xem</button>
+                                <button type="submit" class="btn btn-primary">Xem thông tin điểm danh</button>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
 
+            <?php if($course_id){ ?>
             <div class="row">
                 <div class="col-md-10 mx-auto">
                     <form action="" method="POST">
@@ -87,18 +88,29 @@
                                             <input type="hidden" value="<?= $attendance['id']?>" name="attandanceID">
                                         </td>
                                         <td>
-                                            <select id="status" class="form-select" name="status" required>
-                                                <option value="Chưa điểm danh" <?= (($attendance['status'] == 'Chưa điểm danh')?'selected':'')?> disabled>Chưa điểm danh</option>
-                                                <option value="Đi học" <?= (($attendance['status'] == 'Đi học')?'selected':'')?>>Đi học</option>
-                                                <option value="Vắng" <?= (($attendance['status'] == 'Vắng')?'selected':'')?>>Vắng</option>
-                                            </select>
+                                            <?php if($attendance['status'] == 'Chưa điểm danh') {?>
+                                                <select id="status" class="form-select" name="status" required>
+                                                    <option value="Chưa điểm danh" <?= (($attendance['status'] == 'Chưa điểm danh')?'selected':'')?> disabled>Chưa điểm danh</option>
+                                                    <option value="Đi học" <?= (($attendance['status'] == 'Đi học')?'selected':'')?>>Đi học</option>
+                                                    <option value="Vắng" <?= (($attendance['status'] == 'Vắng')?'selected':'')?>>Vắng</option>
+                                                </select>
+                                            <?php }else{ ?>
+                                                    <p><?= $attendance['status']?></p>
+                                            <?php } ?>
                                         </td>
                                         <td>
                                             <?php 
-                                                if($currentDate <= $attendance['days'] and $currentTime = date('H:i') <= $attendance['time_end']){
-                                                    echo '<button type="submit" class="btn btn-primary">Gửi</button>';
-                                                }else
-                                                    echo '<p>Đã hết hạn điểm danh</p>';
+                                                if($attendance['status'] == 'Chưa điểm danh'){
+                                                    if($currentDate <= $attendance['days'] and $currentTime <= $attendance['time_end']){
+                                                        if($currentTime >= $attendance['time_begin'])
+                                                            echo '<button type="submit" class="btn btn-primary">Gửi</button>';
+                                                        else
+                                                            echo '<p>Chưa đến giờ điểm danh</p>';
+                                                    }else
+                                                        echo '<p>Đã hết hạn điểm danh</p>';
+                                                }else{
+                                                    echo 'Đã lưu kết quả';
+                                                }
                                             ?>
                                         </td>
                                     </tr>
@@ -108,6 +120,7 @@
                     </form>
                 </div>
             </div>
+            <?php } ?>
             <div class="row">
                 <?php if($isSuccess) {?>
                     <div class="alert alert-success col-5 offset-1 fade-in-out" role="alert">
