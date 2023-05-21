@@ -7,10 +7,14 @@
     include('../model/courseclass.php');
     include('../model/attendance.php');
     include('../model/student.php');
+    include('../model/lecturer.php');
     $attendanceModel = new attendance();
     $courseClassModel = new courseclass();
     $studentModel = new student();
-    $classes = $courseClassModel->getAll();
+    $lecturerModel = new lecturer();
+    $lecturer = $lecturerModel->getLecturerByUserId($_SESSION['isLoginAdmin']);
+    $lecturerId = $lecturer['id'];
+    $classes = $courseClassModel->getClassByLecturerId($lecturerId);
     $course_id = '';
     $att_id = '';
     $date = '';
@@ -154,7 +158,7 @@
                                     <td><?= $i+1?></td>
                                     <td><?= $students[$i]['fullName']?></td>
                                     <td><?= $students[$i]['email']?></td>
-                                    <td><?= (($students[$i]['status'])?'Có mặt':'Vắng')?></td>
+                                    <td><?= $students[$i]['status']?></td>
                                 </tr>
                             <?php }?>
                         </tbody>

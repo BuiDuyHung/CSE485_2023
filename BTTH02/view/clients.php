@@ -1,246 +1,123 @@
 <?php
-    // require_once('../model/student.php');
-    // $studentModel = new student();
-    // $student = $studentModel->getAll();
-    // echo "<pre>";
-    //     print_r($student);
-    // echo "</pre>";
+    session_start();
+    if(!isset($_SESSION['isLoginClient'])){
+        header("Location: ../index.php");
+    }
+    include('../model/DB.php');
+    include('../model/student.php');
+    include('../model/courseclass.php');
+    include('../model/attendance.php');
+    $courseClassModel = new courseclass();
+    $studentModel = new student();
+    $attendanceModel = new attendance();
+    $student = $studentModel->getStudentByUserId($_SESSION['isLoginClient']);
+    $classes = $courseClassModel->getClassByStudentId($student['id']);
+    $course_id = '';
+    $isSuccess = '';
+    $attendances = array();
+    if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        if(isset($_POST['course'])){
+            $course_id = $_POST['course'];
+            $attendances = $attendanceModel->getAttandanceByIdCourseClassAndStudentId($course_id, $student['id']);
+        }
+        if(isset($_POST['status'])){
+            $status = $_POST['status']; 
+            $attID = $_POST['attandanceID'];
+            $isSuccess = $attendanceModel->updateStatus($attID,$student['id'],$status);
+        }
+    }
 ?>
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Trang Sinh Viên</title>
-
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../public/template/admin/dist/css/adminlte.min.css">
-</head>
-
-<body class="hold-transition sidebar-mini">
-    <div class="wrapper">
-        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-                </li>
-
-            </ul>
-
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="../index.php" role="button">
-                        Log Out
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-                        <i class="fas fa-expand-arrows-alt"></i>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-
-        <aside class="main-sidebar sidebar-white-primary elevation-4">
-            <a href="" class="brand-link">
-                <img src="../public/template/admin/dist/img/AdminLTELogo.png" alt="" class="brand-image img-circle elevation-3" style="opacity: .8">
-                <span class="brand-text font-weight-light">Công nghệ Web-2-22</span>
-            </a>
-
-            <div class="sidebar">
-                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                    <div class="image">
-                        <img src="../public/template/admin/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
-                    </div>
-                    <div class="info">
-                        <a href="#" class="d-block">Nguyễn Văn A</a>
-                    </div>
-                </div>
-
-
-                <nav class="mt-2">
-                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
-                                    Điểm Danh
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="./clients.php" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Khu vực điểm danh 62TH2.1</p>
-                                    </a>
-                                </li>
-                            </ul>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="" class="nav-link">
-                                        <i class="nav-icon fa-solid fa-lock"></i>
-                                        <p>Khu vực điểm danh 62TH2.2</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fa-solid fa-book"></i>
-                                <p>
-                                    Thống kê
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="./clientStatis.php" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Điểm danh</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fa-solid fa-graduation-cap"></i>
-                                <p>
-                                    Slide Bài Giảng
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Bài 1 - Giới thiệu môn học</p>
-                                    </a>
-                                </li>
-                            </ul>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Bài 2 - Kiến thức cơ bản</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fa-solid fa-video"></i>
-                                <p>
-                                    Video Hướng Dẫn
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Cài đặt Nginx, PHP 8, MariaDB</p>
-                                    </a>
-                                </li>
-                            </ul>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Hướng dẫn khởi chạy Nginx</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </aside>
-
+<?php include_once('../include/clientsite.php')?>
         <div class="content-wrapper">
             <section class="content-header">
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>Khu vực điểm danh 62TH2.1</h1>
+                            <h1>Các lớp học phần tham gia</h1>
                         </div>
                     </div>
                 </div>
             </section>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary">
+                        <form action="" method="POST">
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="course" class="col-sm-2 col-form-label">Lớp học phần:</label>
+                                    <div class="col-sm-10">
+                                        <select id="course" name="course" class="form-select" required>
+                                            <option value="" disabled selected>Chọn lớp học phần</option>
+                                                <?php foreach($classes as $class){ ?>
+                                                    <option value="<?= $class['id']?>" <?=(($class['id'] == $course_id)? 'selected':'') ?> ><?= $class['name']?></option>
+                                                <?php } ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">Xem</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
 
             <div class="row">
                 <div class="col-md-10 mx-auto">
-                    <table class="table table-bordered table-striped">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>Ngày</th>
-                                <th>Mô tả</th>
-                                <th>Trạng thái</th>
-                                <th>Lý do</th>
-                                <th>Gửi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    12/5/2023
-                                    <br />
-                                    1PM - 1:05PM
-                                </td>
-                                <td>Buổi học bình thường</td>
-                                <td>
-                                    <select class="form-select">
-                                        <option>Đi học</option>
-                                        <option>Vắng</option>
-                                    </select>
-                                </td>
-                                <td>...</td>
-                                <td>
-                                    <button type="submit" class="btn btn-primary">Gửi</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    16/5/2023
-                                    <br />
-                                    1PM - 1:05PM
-                                </td>
-                                <td>Buổi học bình thường</td>
-                                <td>
-                                    <select class="form-select">
-                                        <option>Đi học</option>
-                                        <option>Vắng</option>
-                                    </select>
-                                </td>
-                                <td>...</td>
-                                <td>
-                                    <button type="submit" class="btn btn-primary">Gửi</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    19/5/2023
-                                    <br />
-                                    1PM - 1:05PM
-                                </td>
-                                <td>Buổi học bình thường</td>
-                                <td>
-                                    <select class="form-select">
-                                        <option>Đi học</option>
-                                        <option>Vắng</option>
-                                    </select>
-                                </td>
-                                <td>...</td>
-                                <td>
-                                    <button type="submit" class="btn btn-primary">Gửi</button>
-                                </td>
-                            </tr>
-
-                        </tbody>
-                    </table>
+                    <form action="" method="POST">
+                        <table class="table table-bordered table-striped">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Ngày</th>
+                                    <th>Mô tả</th>
+                                    <th>Trạng thái</th>
+                                    <th>Gửi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($attendances as $attendance) {?>
+                                    <tr>
+                                        <td>
+                                            <?= $attendance['days']?>
+                                            <br />
+                                            <?= $attendance['time_begin']?> - <?= $attendance['time_end']?>
+                                        </td>
+                                        <td>Buổi học bình thường
+                                            <input type="hidden" value="<?= $attendance['id']?>" name="attandanceID">
+                                        </td>
+                                        <td>
+                                            <select id="status" class="form-select" name="status" required>
+                                                <option value="Chưa điểm danh" <?= (($attendance['status'] == 'Chưa điểm danh')?'selected':'')?> disabled>Chưa điểm danh</option>
+                                                <option value="Đi học" <?= (($attendance['status'] == 'Đi học')?'selected':'')?>>Đi học</option>
+                                                <option value="Vắng" <?= (($attendance['status'] == 'Vắng')?'selected':'')?>>Vắng</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <?php 
+                                                if($currentDate <= $attendance['days'] and $currentTime = date('H:i') <= $attendance['time_end']){
+                                                    echo '<button type="submit" class="btn btn-primary">Gửi</button>';
+                                                }else
+                                                    echo '<p>Đã hết hạn điểm danh</p>';
+                                            ?>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    </form>
                 </div>
+            </div>
+            <div class="row">
+                <?php if($isSuccess) {?>
+                    <div class="alert alert-success col-5 offset-1 fade-in-out" role="alert">
+                        Lưu trạng thái thành công!
+                    </div>
+                <?php }else if($isSuccess == 0) {?>
+                    <div class="row alert alert-danger col-5 offset-1 fade-in-out" role="alert">
+                        Có lỗi hoặc đã quá hạn điểm danh!
+                    </div>
+                <?php } else echo ''?>
             </div>
         </div>
 
@@ -248,7 +125,12 @@
         <script src="../public/template/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="../public/template/admin/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
         <script src="../public/template/admin/dist/js/adminlte.min.js"></script>
-
+        <script>
+            setTimeout(function() {
+                var element = document.querySelector(".fade-in-out");
+                element.classList.add("show");
+            }, 200);
+        </script>
 </body>
 
 </html>
