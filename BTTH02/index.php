@@ -13,8 +13,10 @@
                     $_SESSION['isLoginAdmin'] = $user['id'];
                     header("Location:view/admin.php");
                 }
-                else
+                else{
+                    $_SESSION['isLoginClient'] = $user['id'];
                     header("Location:view/clients.php");
+                }
                 break;
             }else{
                 header("Location:index.php");

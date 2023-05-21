@@ -2,6 +2,9 @@
     session_start();
     if(isset($_SESSION['isLoginAdmin'])){
         unset($_SESSION['isLoginAdmin']);
-        header("Location:../index.php");
     }
+    if(isset($_SESSION['isLoginClient'])){
+        unset($_SESSION['isLoginClient']);
+    }
+    header("Location:../index.php");
 ?>

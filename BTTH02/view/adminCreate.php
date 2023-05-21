@@ -6,18 +6,21 @@
     include('../model/DB.php');
     include('../model/courseclass.php');
     include('../model/attendance.php');
-    $attendance = new attendance();
-    $courseClass = new courseclass();
-    $classes = $courseClass->getAll();
+    include('../model/lecturer.php');
+    $attendanceModel = new attendance();
+    $courseClassModel = new courseclass();
+    $lecturerModel = new lecturer();
+    $lecturer = $lecturerModel->getLecturerByUserId($_SESSION['isLoginAdmin']);
+    $lecturerId = $lecturer['id'];
+    $classes = $courseClassModel->getClassByLecturerId($lecturerId);
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
-        $course_id = $_POST['course'];
-        $students = $courseClass->getStudentInClass($course_id);
+        $courseId = $_POST['course'];
+        $students = $courseClassModel->getStudentInClass($courseId);
         $date = $_POST['date'];
         $timeStart = $_POST['timeStart'];
         $timeEnd = $_POST['timeEnd'];
-        $lecturer_id = $_SESSION['isLoginAdmin'];
-        $attendance->insertAttendance($lecturer_id,$date,$course_id,$timeStart,$timeEnd);
-        $attendance->insertAttendanceRecord($students);
+        $attendanceModel->insertAttendance($lecturerId,$date,$courseId,$timeStart,$timeEnd);
+        $attendanceModel->insertAttendanceRecord($students);
     }
     include('../include/adminsite.php'); 
 ?>
