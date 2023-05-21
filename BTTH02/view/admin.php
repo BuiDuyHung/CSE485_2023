@@ -138,10 +138,13 @@
                 </div>
             </section>
 
-
-            <h2 class="text-center mt-4 mb-5">Bảng theo dõi điểm danh <?= (($att_id)?"ngày: $date giờ tạo: $time":'')?></h2>
+            <?php if(isset($_GET['att'])){ ?>                                                    
+            <div class="row">
+                <h2 class="text-center mt-4 mb-5 col-12">Bảng theo dõi điểm danh <?= (($att_id)?"ngày: $date giờ tạo: $time":'')?></h2>
+            </div>
 
             <div class="row">
+                
                 <div class="col-md-10 mx-auto">
                     <table class="table table-bordered table-striped">
                         <thead class="table-dark">
@@ -165,6 +168,7 @@
                     </table>
                 </div>
             </div>
+            <?php }?>
         </div>
 
         <script src="../public/template/admin/plugins/jquery/jquery.min.js"></script>
